@@ -1,27 +1,26 @@
-import datetime
-from expense import Expense
+from datetime import datetime, timedelta
 
 class Budget:
-    def __init__(self):
-        self.expenses = []
+    # ... 其他已有代码保持不变 ...
 
-    def add_expense(self, category, description, amount):
-        today = datetime.date.today().isoformat()
-        expense = Expense(today, category, description, amount)
-        self.expenses.append(expense)
-        print("지출이 추가되었습니다.\n")
-
-    def list_expenses(self):
+    def list_expenses_in_last_days(self, days_count):
         if not self.expenses:
-            print("지출 내역이 없습니다.\n")
+            print("지출 기록이 없습니다.\n")
             return
-        print("\n[지출 목록]")
-        for idx, e in enumerate(self.expenses, 1):
-            print(f"{idx}. {e}")
+
+        기준일 = datetime.today().date() - timedelta(days=days_count)
+        대상_지출 = []
+
+        for 지출 in self.expenses:
+            지출일 = datetime.strptime(지출.date, "%Y-%m-%d").date()
+            if 지출일 >= 기준일:
+                대상_지출.append(지출)
+
+        if not 대상_지출:
+            print(f"\n최근 {days_count}일 간 지출 내역이 존재하지 않습니다.\n")
+            return
+
+        print(f"\n[최근 {days_count}일 지출 내역]")
+        for 번호, 지출 in enumerate(대상_지출, start=1):
+            print(f"{번호}. {지출}")
         print()
-
-    def total_spent(self):
-        total = sum(e.amount for e in self.expenses)
-        print(f"총 지출: {total}원\n")
-
-
