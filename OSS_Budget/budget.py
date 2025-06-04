@@ -24,4 +24,13 @@ class Budget:
         total = sum(e.amount for e in self.expenses)
         print(f"총 지출: {total}원\n")
 
-
+    def total_by_month(self, year, month):
+        monthly_total = 0
+        for e in self.expenses:
+            try:
+                date_obj = datetime.datetime.strptime(e.date, "%Y-%m-%d")
+                if date_obj.year == year and date_obj.month == month:
+                    monthly_total += e.amount
+            except:
+                continue
+        print(f"{year}년 {month}월 총 지출: {monthly_total}원\n")
